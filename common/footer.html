@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Style for the top banner */
+        .top-banner {
+            background: linear-gradient(135deg, #1a73e8, #23d5ab);
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('abstract-pattern.png'); /* Replace with your abstract pattern image */
+            opacity: 0.5;
+            z-index: -1;
+        }
+
+        h1 {
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-family: 'Poppins', sans-serif; /* Use the 'Poppins' Google Font */
+        }
+
+        p {
+            font-size: 8px;
+            margin-top: 10px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="top-banner">
+        <h1>Base2Ace Academy</h1>
+        <p>An ISO 9001:2015 Certified Company</p>
+    </div>
+    
+    <!-- The rest of your webpage content goes here -->
+</body>
+</html>
