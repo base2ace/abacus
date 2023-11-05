@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+td, th {
+  border: 1px solid black;
+  padding: 0.5rem;
+
+}
+
+html, body {
+    height: 100%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+background:#f2d7d5;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+table {
+  border: 1px solid black;
+  table-layout: fixed;
+  width: 1100px;
+  text-align: center;
+  font-weight:bold;
+  font-size:180%
+}
+
+.blank_row
+{
+    height: 80px
+    background-color: #111;
+}
+
+.wrong
+{
+    background-color: red;
+}
+
+.correct
+{
+    background-color: green;
+}
+
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+.button4 {border-radius: 12px;}
+
+h2{
+color: red;
+font-size: 26px;
+text-align: center;
+}
+
+</style>
+
+</head>
+	<body>
+
+
+<h2> Section A</h2>
+<p id = "row1" hidden>5,9,8,3,9,4,2,3,7,6</p>
+<p id = "row2" hidden>4,9,1,1,8,9,2,8,9,3</p>
+<p id = "row3" hidden>-7,-1,7,5,-6,1,5,6,9,1</p>
+<p id = "row4" hidden>6,3,3,2,7,6,4,5,4,2</p>
+
+
+        <script type="text/javascript">
+
+window.onload = DiaplayTable(document.getElementById('row1').innerHTML,document.getElementById('row2').innerHTML,document.getElementById('row3').innerHTML,document.getElementById('row4').innerHTML);
+
+				function InsertHeaderRow(table, row) {
+					var rowArr = row.split(',');
+					var len = rowArr.length
+
+					var header = table.createTHead();
+					var row = header.insertRow(0);
+
+					for (let i = 0; i < len; i++) {
+						var cell = row.insertCell(i);
+						cell.innerHTML = (i+1).toString();
+						cell.style = "background-color: #F43308;color: white"
+					}
+				}
+
+				function InsertRowInTable(table, row, index) {
+
+					var rowArr = row.split(',');
+
+					table.insertRow();
+					//iterate over every array(row) within tableArr
+					for (let i = 0; i < row.length; i++) {
+
+					var test = parseInt(row[i]);
+
+						if (!isNaN(parseInt(rowArr[i])))
+						{
+							//Insert a new row element into the table element
+							let newCell = table.rows[index].insertCell();
+							newCell.textContent = parseInt(rowArr[i]);
+						}
+					}
+				}
+
+				function InsertEditableRowInTable(len, index) {
+
+					let tableedit = document.createElement('table');
+					tableedit.id = "editable"
+					tableedit.contentEditable = "true";
+
+					row = tableedit.insertRow();
+					row.id = "blank_row";
+					row.style="height: 50px; background-color: #f9ebea;";
+					row.trpe = "number"
+
+
+					//iterate over every array(row) within tableArr
+					for (let i = 0; i < len; i++) {
+							let newCell = tableedit.rows[index].insertCell();
+							newCell.blur = "IsNumeric";
+							newCell.onfocusout = "IsNumeric";
+							newCell.addEventListener('blur', IsNumeric);
+							newCell.id = i.toString();
+
+					}
+					//append the compiled table to the DOM
+					document.body.appendChild(tableedit);
+
+				}
+
+
+
+				function DisplaySum(rowArr, index) {
+
+					var elementExists = document.getElementById("answer");
+					if (elementExists != null) {
+						elementExists.remove();
+					}
+
+					let tablesum = document.createElement('table');
+					tablesum.id = "answer"
+
+					tablesum.insertRow();
+					//iterate over every array(row) within tableArr
+					for (let i = 0; i < rowArr.length; i++) {
+
+					var test = parseInt(rowArr[i]);
+
+						if (!isNaN(parseInt(rowArr[i])))
+						{
+							//Insert a new row element into the table element
+							let newCell = tablesum.rows[index].insertCell();
+							newCell.textContent = parseInt(rowArr[i]);
+							newCell.style = "background-color: #9AD1F7  ;"
+						}
+					}
+
+					//append the compiled table to the DOM
+					document.body.appendChild(tablesum);
+				}
+
+
+function Check(r1,r2,r3,r4 ) {
+
+var row1 = r1.split(',');
+var row2 = r2.split(',');
+var row3 = r3.split(',');
+var row4 = r4.split(',');
+
+
+				var wrong = 0;
+
+				var sum = [];
+
+				var ans = [];
+				
+				var attempted = 0;
+
+				ansrow = document.getElementById("blank_row");
+				var Cells = ansrow.getElementsByTagName("td");
+
+				for (let i = 0; i < row1.length; i++) {
+
+sum[i] = parseInt(row1[i]) + parseInt(row2[i]) + parseInt(row3[i]) + parseInt(row4[i]) 
+					var val = Cells[i].innerHTML;
+					var anscell = -1;
+
+					if( val != "")
+					{
+						anscell = parseInt(Cells[i].innerHTML)
+						attempted++;
+					}
+
+					if (sum[i] != anscell)
+					{
+						wrong = wrong + 1;
+						cell = document.getElementById(Cells[i].id)
+						cell.style="background-color: #A0002C; color:white"
+					}
+					else
+					{
+						cell = document.getElementById(Cells[i].id)
+						cell.style="background-color: #58D68D  ;"
+					}
+				}
+
+				var ansLabel = document.getElementById("ansLabel");
+				var res = document.getElementById("res");
+
+				var total = row1.length;
+				var correct = total - wrong;
+
+
+				if ( attempted == row1.length)
+				{
+					//create a Table Object
+					DisplaySum(sum, 0);
+					ansLabel.innerHTML = "Check the answers below"
+					res.innerHTML = "Result : " + correct.toString() + " / " + total.toString()
+				}
+				else
+				{
+					ansLabel.innerHTML = "Complete all the sums before pressing Check Button."
+					var unattempted = total - attempted; 
+					res.innerHTML = "Result : " + unattempted.toString() + " Unattempted Sums.";
+				}
+
+
+
+
+			}
+
+function DiaplayTable(row1,row2,row3,row4 ) {
+				let table = document.createElement('table');
+
+				InsertHeaderRow(table, row1);
+
+InsertRowInTable(table, row1,1);
+InsertRowInTable(table, row2,2);
+InsertRowInTable(table, row3,3);
+InsertRowInTable(table, row4,4);
+
+
+				document.body.appendChild(table);
+
+				var rowArr = row1.split(',');
+				var len = rowArr.length
+
+				InsertEditableRowInTable(len, 0);
+
+			}
+
+
+			function IsNumeric(input)
+			{
+				document.getElementById("gk").innerHTML = "gk"
+				return (input - 0) == input && (''+input).trim().length > 0;
+			}
+
+		</script>
+		<br>
+<button class="button button4" onclick="Check(document.getElementById('row1').innerHTML,document.getElementById('row2').innerHTML,document.getElementById('row3').innerHTML,document.getElementById('row4').innerHTML)">Check</button>
+		<h2 id="ansLabel" style="color: #D35400;"></h2>
+		<h2 id="res" style="color: #D35400;"></h2>
+</body>
+</html>
