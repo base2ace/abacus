@@ -4,9 +4,6 @@ $globe-spacing: 40px;
 $globe-spread: 3px;
 $light-off-opacity: 0.4;
 
-body {
-  background: #000;
-}
 .lightrope {
   text-align: center;
   white-space: nowrap;
