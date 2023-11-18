@@ -15,13 +15,13 @@
 <script>
   function moveImage() {
     var img = document.getElementById('movingImage');
-    var currentRight = parseInt(img.style.right) || 0;
+    var currentRight = parseFloat(img.style.right) || 0.0;
 
     // Check if image reached the left end of the screen
     if (currentRight >= window.innerWidth - img.width) {
       img.style.right = '0px'; // Reset position to start from the right
     } else {
-      img.style.right = (currentRight + 1) + 'px'; // Change '5' to adjust the movement speed
+      img.style.right = (currentRight + 0.2) + 'px'; // Change '5' to adjust the movement speed
     }
     
     // Request animation frame to create a smooth movement
