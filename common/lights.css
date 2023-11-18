@@ -1,12 +1,12 @@
 .light-row {
-  background: #cdbf73;
+  background: #000;
   position: relative;
   overflow: hidden;
   padding: 20px 0;
 }
 /* Style for the top banner */
 .top-banner {
-  background: linear-gradient(135deg, #1a73e8, #23d5ab);
+  background: linear-gradient(90deg, rgba(19,19,20,0.5971638655462185) 27%, rgba(73,58,59,0.9753151260504201) 97%);
   color: #fff;
   padding: 1px 0;
   text-align: center;
