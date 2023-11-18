@@ -7,11 +7,31 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <div class="top-banner">
+		<img id="movingImage" src="santa.gif" alt="Moving Image">
         <h1>Base2Ace Academy</h1>
         <p>An ISO 9001:2015 Certified Company</p>
     </div>
+<script>
+  function moveImage() {
+    var img = document.getElementById('movingImage');
+    var currentRight = parseInt(img.style.right) || 0;
+
+    // Check if image reached the left end of the screen
+    if (currentRight >= window.innerWidth - img.width) {
+      img.style.right = '0px'; // Reset position to start from the right
+    } else {
+      img.style.right = (currentRight + 5) + 'px'; // Change '5' to adjust the movement speed
+    }
+    
+    // Request animation frame to create a smooth movement
+    requestAnimationFrame(moveImage);
+  }
+  
+  // Call moveImage function to start the movement
+  moveImage();
+</script>
+
     <div class="light-row">
         <ul class="lightrope">
             <li></li>
