@@ -4,6 +4,14 @@
   right: 0; /* Initial right position */
 }
 	
+#Tree {
+  position: absolute;
+  top: 10px; /* Initial top position */
+  left: 0; /* Initial right position */
+  width: 8%;
+  height: auto;
+}
+
 .light-row {
   background: #000;
   position: relative;
