@@ -8,7 +8,8 @@
 </head>
 <body>
     <div class="top-banner">
-		<img id="movingImage" src="heart.gif" alt="Moving Image">
+		<img id="movingImage" src="val2.png" alt="Moving Image">
+		<img id="movingImage1" src="val1.png" alt="Moving Image">
 		    <!-- <img id="Tree" src="tree.png" alt="Tree"> -->
         <h1>Base2Ace Academy</h1>
         <p>An ISO 9001:2015 Certified Company</p>
@@ -29,8 +30,24 @@
     requestAnimationFrame(moveImage);
   }
   
+function moveImage1() {
+  var img = document.getElementById('movingImage1');
+  var currentLeft = parseFloat(img.style.left) || 0.0;
+
+  // Check if image reached the right end of the screen
+  if (currentLeft >= window.innerWidth - img.width) {
+    img.style.left = '0px'; // Reset position to start from the left
+  } else {
+    img.style.left = (currentLeft + 0.4) + 'px'; // Change '0.6' to adjust the movement speed
+  }
+  
+  // Request animation frame to create a smooth movement
+  requestAnimationFrame(moveImage1);
+}
+
   // Call moveImage function to start the movement
   moveImage();
+    moveImage1();
 </script>
 
     <div class="light-row">
