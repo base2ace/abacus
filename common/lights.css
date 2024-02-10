@@ -1,7 +1,8 @@
 #movingImage {
   position: absolute;
-  top: -10px; /* Initial top position */
+  top: 0px; /* Initial top position */
   right: 0; /* Initial right position */
+   height: 150%;
 }
 	
 #Tree {
@@ -20,7 +21,7 @@
 }
 /* Style for the top banner */
 .top-banner {
-  background: #D6001C;
+  background: #f78bbf;
   color: #fff;
   padding: 1px 0;
   text-align: center;
