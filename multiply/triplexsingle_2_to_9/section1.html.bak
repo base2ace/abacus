@@ -81,7 +81,7 @@ text-align: center;
 </head>
 	<body>
 
-		<h2> 4 Digit X 1 Digit </h2>
+		<h2> 3 Digit X 1 Digit </h2>
 
 		<script type="text/javascript">
 
@@ -93,8 +93,8 @@ text-align: center;
 			table1.style="border: none;";
 			table1.id = "sums";
 			
-			var part1 = Math.floor((Math.random() * 7600) + 1200);
-			var part2 = Math.floor((Math.random() * 8) + 2);
+			var part1 = Math.floor((Math.random() * 900) + 80);
+			var part2 = Math.floor((Math.random() * 8) + 1);
 			
 			let newCell1 = table1.rows[index].insertCell();	
 			newCell1.textContent = part1;
