@@ -67,6 +67,11 @@
       font-size: 20px;
       margin-top: 20px;
     }
+    .question-number {
+      font-size: 20px;
+      color: blue;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -81,6 +86,7 @@
       <button onclick="generateQuiz()">Generate Quiz</button>
     </div>
     <div class="question-container" id="question-container">
+      <p class="question-number" id="question-number"></p>
       <p class="question" id="question"></p>
       <input type="number" id="user-answer" placeholder="Enter your answer">
       <button onclick="checkAnswer()">Submit Answer</button>
@@ -101,6 +107,7 @@
     let userAnswerInput = document.getElementById('user-answer');
     let summaryContainer = document.getElementById('summary-container');
     let timerDisplay = document.getElementById('timer');
+    let questionNumberDisplay = document.getElementById('question-number');
 
     let questions = [];
     let currentQuestionIndex = 0;
@@ -121,10 +128,18 @@
       }
 
       questions = [];
-      for (let i = 0; i < numberOfQuestions; i++) {
+	  let questionSet = new Set();
+      
+      for (let i = 0; i < numberOfQuestions;) {
         let num1 = Math.floor(Math.random() * (endTable - startTable + 1)) + startTable;
         let num2 = Math.floor(Math.random() * (multiplicationUpTo - 2 + 1)) + 2;
-        questions.push({ question: `${num1} x ${num2} `, correctAnswer: num1 * num2, userAnswer: null });
+        let questionString = `${num1} x ${num2}`;
+        
+        if (!questionSet.has(questionString)) {
+          questionSet.add(questionString);
+          questions.push({ question: `${num1} x ${num2} `, correctAnswer: num1 * num2, userAnswer: null });
+		  ++i;
+		}
       }
 
       startScreen.style.display = 'none';
@@ -139,6 +154,7 @@
       questionText.textContent = currentQuestion.question;
       userAnswerInput.value = '';
 	  userAnswerInput.focus();
+      questionNumberDisplay.textContent = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
       questionContainer.style.display = 'block';
       summaryContainer.innerHTML = '';
     }
