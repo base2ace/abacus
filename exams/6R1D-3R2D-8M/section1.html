@@ -92,12 +92,12 @@
     <script>
 	
 	// Time and total sums settings.
-	var totalMinsAlloted = 8;
+	var totalMinsAlloted = 10;
 	var totalSums =  50;
-	var numberOfRows = 6;
+	var numberOfRows = 8;
 	var singleDigitCutOff = 25;
-	var numRowsAfterCutoff = 3;
-	var numOfDoubleDigits = 3;
+	var numRowsAfterCutoff = 4;
+	var numOfDoubleDigits = 4;
 
 
       var numbers = [];
@@ -159,6 +159,17 @@
         }
       }
 
+function isTwoDigitNumber(number) {
+    // Check if the number is an integer
+    if (!Number.isInteger(number)) {
+        return false;
+    }
+    // Convert the number to its absolute value
+    const absNumber = Math.abs(number);
+    // Check if the absolute value is between 10 and 99 (inclusive)
+    return absNumber >= 10 && absNumber <= 99;
+}
+
 function generateNumbersEx(dig = 1) {
   let numbers = [];
   let total = 0;
@@ -183,6 +194,10 @@ function generateNumbersEx(dig = 1) {
 		minRange = 9;
 	}
     let randomNum = Math.floor(Math.random() * maxRange) - minRange;
+	if (dig == 2 && !isTwoDigitNumber(randomNum))
+	{
+		continue;
+	}
     if (randomNum === 0) {
       continue;
     }
