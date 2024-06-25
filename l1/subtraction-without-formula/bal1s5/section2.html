@@ -76,14 +76,15 @@ text-align: center;
 
 
 <h2> Section B</h2>
-<p id = "row1" hidden>5,5,2,2,3,5,2,1,1,2</p>
-<p id = "row2" hidden>2,1,1,1,1,3,5,2,3,5</p>
-<p id = "row3" hidden>2,3,5,1,5,1,2,5,5,1</p>
+<p id = "row1" hidden>5,5,1,4,2,1,3,5,2,3</p>
+<p id = "row2" hidden>4,1,5,5,2,3,-1,3,5,1</p>
+<p id = "row3" hidden>-5,-5,3,-4,-4,5,-2,-1,2,-2</p>
+<p id = "row4" hidden>-4,1,-5,2,5,-2,3,-5,-5,1</p>
 
 
         <script type="text/javascript">
 
-window.onload = DiaplayTable(document.getElementById('row1').innerHTML,document.getElementById('row2').innerHTML,document.getElementById('row3').innerHTML);
+window.onload = DiaplayTable(document.getElementById('row1').innerHTML,document.getElementById('row2').innerHTML,document.getElementById('row3').innerHTML,document.getElementById('row4').innerHTML);
 
 				function InsertHeaderRow(table, row) {
 					var rowArr = row.split(',');
@@ -176,11 +177,12 @@ window.onload = DiaplayTable(document.getElementById('row1').innerHTML,document.
 				}
 
 
-function Check(r1,r2,r3 ) {
+function Check(r1,r2,r3,r4 ) {
 
 var row1 = r1.split(',');
 var row2 = r2.split(',');
 var row3 = r3.split(',');
+var row4 = r4.split(',');
 
 
 				var wrong = 0;
@@ -196,7 +198,7 @@ var row3 = r3.split(',');
 
 				for (let i = 0; i < row1.length; i++) {
 
-sum[i] = parseInt(row1[i]) + parseInt(row2[i]) + parseInt(row3[i]) 
+sum[i] = parseInt(row1[i]) + parseInt(row2[i]) + parseInt(row3[i]) + parseInt(row4[i]) 
 					var val = Cells[i].innerHTML;
 					var anscell = -1;
 
@@ -245,7 +247,7 @@ sum[i] = parseInt(row1[i]) + parseInt(row2[i]) + parseInt(row3[i])
 
 			}
 
-function DiaplayTable(row1,row2,row3 ) {
+function DiaplayTable(row1,row2,row3,row4 ) {
 				let table = document.createElement('table');
 
 				InsertHeaderRow(table, row1);
@@ -253,6 +255,7 @@ function DiaplayTable(row1,row2,row3 ) {
 InsertRowInTable(table, row1,1);
 InsertRowInTable(table, row2,2);
 InsertRowInTable(table, row3,3);
+InsertRowInTable(table, row4,4);
 
 
 				document.body.appendChild(table);
@@ -273,7 +276,7 @@ InsertRowInTable(table, row3,3);
 
 		</script>
 		<br>
-<button class="button button4" onclick="Check(document.getElementById('row1').innerHTML,document.getElementById('row2').innerHTML,document.getElementById('row3').innerHTML)">Check</button>
+<button class="button button4" onclick="Check(document.getElementById('row1').innerHTML,document.getElementById('row2').innerHTML,document.getElementById('row3').innerHTML,document.getElementById('row4').innerHTML)">Check</button>
 		<h2 id="ansLabel" style="color: #D35400;"></h2>
 		<h2 id="res" style="color: #D35400;"></h2>
 </body>
