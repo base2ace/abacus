@@ -78,9 +78,10 @@
   <div class="container">
     <h1>Multiplication Quiz Generator</h1>
     <div id="start-screen">
-      <input type="number" id="start-table" placeholder="Which number to start from (First digit begin)">
-      <input type="number" id="end-table" placeholder="Which number to end at (First digit end)">
-      <input type="number" id="multiplication-up-to" placeholder="Multiplication up to which number (second digit end)">
+      <input type="number" id="start-table" placeholder="First digit starting number">
+      <input type="number" id="end-table" placeholder="First digit ending number">
+      <input type="number" id="multiplication-from" placeholder="Second digit starting number">
+      <input type="number" id="multiplication-up-to" placeholder="Second digit ending number">
       <input type="number" id="number-of-questions" placeholder="Number of Questions">
       <input type="number" id="quiz-duration" placeholder="Quiz Duration (in minutes)">
       <button onclick="generateQuiz()">Generate Quiz</button>
@@ -99,6 +100,7 @@
     let startScreen = document.getElementById('start-screen');
     let startTableInput = document.getElementById('start-table');
     let endTableInput = document.getElementById('end-table');
+    let multiplicationFromInput = document.getElementById('multiplication-from');
     let multiplicationUpToInput = document.getElementById('multiplication-up-to');
     let numberOfQuestionsInput = document.getElementById('number-of-questions');
     let quizDurationInput = document.getElementById('quiz-duration');
@@ -118,11 +120,12 @@
     function generateQuiz() {
       let startTable = parseInt(startTableInput.value);
       let endTable = parseInt(endTableInput.value);
-      let multiplicationUpTo = parseInt(multiplicationUpToInput.value);
+	  let multiplicationFrom = parseInt(multiplicationFromInput.value);
+      let multiplicationUpTo = parseInt(multiplicationUpToInput.value);	  
       let numberOfQuestions = parseInt(numberOfQuestionsInput.value);
       let quizDuration = parseInt(quizDurationInput.value);
 
-      if (!startTable || !endTable || !multiplicationUpTo || !numberOfQuestions || !quizDuration) {
+      if (!startTable || !endTable || !multiplicationFrom || !multiplicationUpTo || !numberOfQuestions || !quizDuration) {
         alert('Please fill in all fields.');
         return;
       }
@@ -132,7 +135,7 @@
       
       for (let i = 0; i < numberOfQuestions;) {
         let num1 = Math.floor(Math.random() * (endTable - startTable + 1)) + startTable;
-        let num2 = Math.floor(Math.random() * (multiplicationUpTo - 2 + 1)) + 2;
+        let num2 = Math.floor(Math.random() * (multiplicationUpTo - multiplicationFrom + 1)) + multiplicationFrom;
         let questionString = `${num1} x ${num2}`;
         
         if (!questionSet.has(questionString)) {
