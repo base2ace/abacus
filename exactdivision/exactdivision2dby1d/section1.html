@@ -87,14 +87,28 @@ text-align: center;
 
 		window.onload = DiaplayTable();
 
+		function randomIntFromInterval(min, max, part2, check) 
+		{ 
+			var ran_num = Math.floor(Math.random() * (max - min + 1) + min);
+			
+			if(ran_num * part2	< check)
+			{
+				ran_num = randomIntFromInterval(min, max, part2, check)
+			}
+				
+		  return ran_num;
+		}
+
 		function InsertRowInTable(table1, index)
 		{
 			table1.insertRow();
 			table1.style="border: none;";
 			table1.id = "sums";
 			
-			var part2 = Math.floor((Math.random() * 9) + 1);
-			var part1 = Math.floor((Math.random() * 9) + 1) * part2;
+			//var part1 = Math.floor((Math.random() * 90) + 10);
+			var part2 = Math.floor((Math.random() * 7) + 2);
+			
+			var part1 = randomIntFromInterval(1,9, part2, 10) * part2;
 			
 			let newCell1 = table1.rows[index].insertCell();	
 			newCell1.textContent = part1;
@@ -155,11 +169,6 @@ text-align: center;
 							{
 								isAnyAnswerLeft = 1;
 							}
-							else
-							{
-								var ansLabel = document.getElementById("ansLabel");
-								ansLabel.innerHTML = "Attempt all sums before seeing the Answers."
-							}
 						}
 				   }
 				}
@@ -205,7 +214,12 @@ text-align: center;
 							if( val != "")
 							{
 								answer = parseInt(col.innerHTML.trim())
-							}	
+							}
+							else
+							{
+								var ansLabel = document.getElementById("ansLabel");
+								ansLabel.innerHTML = "Attempt all sums before seeing the Answers."
+							}							
 							var oper = part1 / part2;
 						
 							if (oper != answer && answer != -1)
