@@ -1,0 +1,281 @@
+<html>
+<head>
+<style>
+
+table {
+	border-collapse: collapse;
+	border-collapse:separate;
+	border-spacing:0 15px;
+}
+			
+
+td, th {
+  border: 1px solid black;
+  padding: 0.5rem;
+
+}
+
+html, body {
+    height: 100%;
+}
+
+html {
+    display: table;
+    margin: auto;
+}
+
+body {
+background:#f2d7d5;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+table {
+  border: 1px solid black;
+  table-layout: fixed;
+  width: 1100px;
+  text-align: center;
+  font-weight:bold;
+  font-size:180%
+}
+
+.blank_row
+{
+    height: 80px
+    background-color: #111;
+}
+
+.wrong
+{
+    background-color: red;
+}
+
+.correct
+{
+    background-color: green;
+}
+
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+.button4 {border-radius: 12px;}
+
+h2{
+color: red;
+font-size: 26px;
+text-align: center;
+}
+
+</style>
+
+</head>
+	<body>
+
+		<h2> 4 Digit / 3 Digit </h2>
+
+		<script type="text/javascript">
+
+		window.onload = DiaplayTable();
+
+		function randomIntFromInterval(min, max, part2, check) 
+		{ 
+			var ran_num = Math.floor(Math.random() * (max - min + 1) + min);
+			
+			if(ran_num * part2	< check)
+			{
+				ran_num = randomIntFromInterval(min, max, part2, check)
+			}
+				
+		  return ran_num;
+		}
+
+		function InsertRowInTable(table1, index)
+		{
+			table1.insertRow();
+			table1.style="border: none;";
+			table1.id = "sums";
+			
+			var seed = Math.floor((Math.random() * 70) + 25);
+			
+			var part2 = randomIntFromInterval(11,99, seed, 100) * seed;
+			var part1 = randomIntFromInterval(11,99, seed, 1000) * seed;
+			
+			let newCell1 = table1.rows[index].insertCell();	
+			newCell1.textContent = part1;
+			newCell1.id = "part1"
+
+			let CellOper = table1.rows[index].insertCell();	
+			CellOper.textContent = '/';
+			CellOper.style="border-top: none;border-bottom: none;border-left: none;border-right: none;";
+			
+			let newCell2 = table1.rows[index].insertCell();	
+			newCell2.textContent = part2;
+			newCell2.id = "part2"
+
+			let cellEqual = table1.rows[index].insertCell();	
+			cellEqual.textContent = '=';
+			cellEqual.style="border-top: none;border-bottom: none;border-left: none;border-right: none;";
+
+			let cellAns = table1.rows[index].insertCell();	
+			cellAns.contentEditable = "true";
+			cellAns.style="height: 50px; background-color: #f9ebea;";
+			cellAns.id = "ans"
+
+			let actualAns = table1.rows[index].insertCell();
+			actualAns.id = "actual_ans"
+			actualAns.style.visibility = 'hidden';
+			
+		}
+		
+		
+		function DiaplayTable() 
+		{
+			let table1 = document.createElement('table');
+
+			for (let i = 0; i < 20; i++) {
+				InsertRowInTable(table1,i);	
+			}
+			
+			document.body.appendChild(table1);
+
+		}
+
+		function Check()
+		{
+				var table_sums = document.getElementById("sums");
+				var wrong = 0;
+				var isAnyAnswerLeft = 0;
+				
+				
+				for (var i = 0, row; row = table_sums.rows[i]; i++)
+				{  
+				   for (var j = 0, col; col = row.cells[j]; j++)
+				   {
+						if(col.id == "ans")
+						{
+							var val = col.innerHTML;
+
+							if( val == "")
+							{
+								isAnyAnswerLeft = 1;
+							}
+						}
+				   }
+				}
+				
+				for (var i = 0, row; row = table_sums.rows[i]; i++)
+				{
+				   //iterate through rows
+				   //rows would be accessed using the "row" variable assigned in the for loop
+				   var part1 = -1;
+				   var part2 = -1;
+				   var answer = -1;
+				   
+				   for (var j = 0, col; col = row.cells[j]; j++)
+				   {
+						//iterate through columns
+						//columns would be accessed using the "col" variable assigned in the for loop
+						var anscell = -1;
+
+						if(col.id == "part1")
+						{
+							var val = col.innerHTML;
+
+							if( val != "")
+							{
+								part1 = parseInt(col.innerHTML)
+							}
+						}
+
+						if(col.id == "part2")
+						{
+							var val = col.innerHTML;
+
+							if( val != "")
+							{
+								part2 = parseInt(col.innerHTML)
+							}
+						}
+
+						if(col.id == "ans")
+						{
+							var val = col.innerHTML;
+
+							if( val != "")
+							{
+								answer = parseInt(col.innerHTML.trim())
+							}
+							else
+							{
+								var ansLabel = document.getElementById("ansLabel");
+								ansLabel.innerHTML = "Attempt all sums before seeing the Answers."
+							}							
+							var oper = part1 / part2;
+						
+							if (oper != answer && answer != -1)
+							{
+								wrong = wrong + 1;
+								col.style="background-color: #A0002C; color:white"
+							}
+							else
+							{
+								col.style="background-color: #58D68D  ;"
+							}
+							
+						}
+						
+						if(col.id == "actual_ans")
+						{
+							var total = 20;
+							if(isAnyAnswerLeft == 0)
+							{
+								col.style = "background-color: #9AD1F7  ;"
+								col.id = "actual_ans"
+								col.innerHTML = oper
+								col.style.visibility = '';
+								
+								var ansLabel = document.getElementById("ansLabel");
+								var res = document.getElementById("res");
+								ansLabel.innerHTML = "Check your result below."
+								var correct = total - wrong;
+								res.innerHTML = "Result : " + correct.toString() + " / " + total.toString();
+							}
+							else
+							{
+								var ansLabel = document.getElementById("ansLabel");
+								ansLabel.innerHTML = "Attempt all sums before seeing the Answers."
+								var correct = total - wrong;
+								res.innerHTML = "Result : " + correct.toString() + " / " + total.toString();
+							}
+						}						
+					}						
+				   
+				}				
+
+		}
+
+
+		function IsNumeric(input)
+		{
+			document.getElementById("gk").innerHTML = "gk"
+			return (input - 0) == input && (''+input).trim().length > 0;
+		}
+
+</script>
+
+	<button class="button button4" onclick="Check()">Check</button>
+	<h2 id="ansLabel" style="color: #D35400;"></h2>
+	<h2 id="res" style="color: #D35400;"></h2>
+	</body>
+
+</html>
