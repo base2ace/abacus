@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sum Checker</title>
+    <style>
+      /* Styles for the buttons */
+      .button {
+        width: 50px;
+        height: 50px;
+        background-color: SteelBlue;
+        border-radius: 30%;
+        border: none;
+        font-size: 20px;
+        color: white;
+        margin-right:5px;
+		margin-top:10px;
+      }
+
+      /* Styles for the numbers */
+      .number {
+        font-size: 30px;
+        margin-right: 10px;
+      }
+
+      /* Style for the input field */
+      #input {
+        width: 100px;
+        height: 30px;
+        font-size: 20px;
+        margin-top: 10px;
+      }
+
+       /* Style for the screenshot button */
+		#screenshot, #next, #start {
+background-image: linear-gradient(to right, #808080 0%, #3fada8  51%, #808080  100%);
+            margin: 10px;
+            padding: 15px 45px;
+            text-align: center;
+            text-transform: uppercase;
+            background-size: 200% auto;
+            color: white;            
+            box-shadow: 0 0 20px #eee;
+            border-radius: 10px;
+            display: block;
+	}
+
+          #screenshot:hover, #next:hover, #start:hover {
+            background-position: right center; /* change the direction of the change here */
+            color: #fff;
+            text-decoration: none;
+          }
+
+         		  
+      /* Style for the message */
+      #message {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image:linear-gradient(to right, #093028 0%, #237A57  51%, #093028  100%);
+        margin-top: 10px;
+      }
+
+      /* Style for the counter */
+      #counter {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image:linear-gradient(to right, #780206 0%, #061161  51%, #780206  100%);
+        margin-top: 10px;
+      }
+      
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+	}
+	.container {
+  display: grid;
+  grid-template-columns: 5fr 2fr;
+}
+
+      /* Styles for the timer */
+      #timer {
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-image:linear-gradient(to right, #ee0979 0%, #ff6a00  51%, #ee0979  100%);
+      }
+
+	
+    </style>
+    <script>
+	
+	// Time and total sums settings.
+	var totalMinsAlloted = 8;
+	var totalSums =  50;
+	var numberOfRows = 5;
+	var singleDigitCutOff = 25;
+	var numRowsAfterCutoff = 6;
+	var numOfDoubleDigits = 0;
+
+
+      var numbers = [];
+      var sum = 0;
+      var currentButton = 1;
+      var counter = 0;
+      var timeLeft = totalMinsAlloted * 60 * 1000;
+      var timerId;
+	  var attemptedSums = 0;
+	  var wrongSums = 0;
+	  var questionMap = new Map();
+	  var answerMap = new Map();
+	  var correctAnswerMap = new Map()
+	  var sumCount = 1;
+	  var liveQuestion = 1;
+	  var hasTestStarted = 0;
+
+
+      function startTimer() {
+		hasTestStarted = 1;
+        var button = document.getElementById("start");
+        button.style.visibility = "hidden";
+		
+        var button = document.getElementById("next");
+        button.style.visibility = "visible";
+        updateTimer();
+		
+        timerId = setInterval(countdown, 10);
+
+
+        var current = document.getElementById("button" + currentButton);
+		current.style.border = "4px solid Chartreuse";
+		current.style.backgroundColor = "MidnightBlue";
+
+        document.getElementById("input").disabled = false;
+		document.getElementById("input").focus();
+		
+      }
+
+      function updateTimer() {
+        var minutes = Math.floor(timeLeft / 60000);
+        var seconds = Math.floor((timeLeft % 60000) / 1000);
+        var timerString = minutes + ":" + seconds
+        document.getElementById("timer").innerHTML = "Time Left: " + timerString;
+      }
+
+      function countdown() {
+        if (timeLeft == 0) {
+          clearInterval(timerId);
+		  document.getElementById("input").disabled = true;
+		  document.getElementById("next").disabled = true;
+		  document.getElementById("counter").innerHTML = "You have attempted " + attemptedSums + " sums, out of which "+(attemptedSums - wrongSums)  +" were correct. Your score : " (attemptedSums - wrongSums) + "/"+totalSums;
+          alert("Time is up! Stop Writing.");
+			var button = document.getElementById("screenshot");
+			button.style.visibility = "visible";
+        } else {
+          timeLeft -= 10;
+          updateTimer();
+        }
+      }
+
+function generateNumbersEx(dig = 1) {
+  let numbers = [];
+  let total = 0;
+  let prevNumber = null;
+  let count = 0;
+  
+  if (dig == 2)
+  {
+	maxRange = 199;
+	minRange = 99;
+  }
+  if (dig == 1)
+  {
+	maxRange = 19;
+	minRange = 9;
+  }
+
+  while (numbers.length < numberOfRows) {
+	if (count == numOfDoubleDigits)
+	{
+		maxRange = 19;
+		minRange = 9;
+	}
+    let randomNum = Math.floor(Math.random() * maxRange) - minRange;
+    if (randomNum === 0) {
+      continue;
+    }
+    if (prevNumber === randomNum) {
+      continue;
+    }
+    if (total + randomNum < 0) {
+      continue;
+    }
+    numbers.push(randomNum);
+    total += randomNum;
+    prevNumber = randomNum;
+	count++;
+  }
+
+  return numbers;
+}
+
+
+function ShowAnswerTootip()
+{
+		var text = this.innerHTML;
+		var num = parseInt(text, 10); // 123
+		
+		var toolTipText = "Ques " + text + ". ";
+		var correctAns = correctAnswerMap.get(num);
+		var yourAnswer = answerMap.get(num);
+		let toolTip = document.createElement("div");
+
+		if(correctAns == yourAnswer)
+		{
+			toolTip.style.backgroundColor = "LightGreen";
+		}
+		else
+		{
+			toolTip.style.backgroundColor = "LightCoral";
+		}
+
+		if(yourAnswer == undefined)
+		{
+			toolTipText += "Not Attempted";
+			toolTip.style.backgroundColor = "LightBlue";
+		}
+		else
+		{
+			toolTipText += " Correct Answer : " + correctAns + ", Your Answer : " + yourAnswer;
+		}
+		
+
+		
+		toolTip.classList.add("div");
+		toolTip.setAttribute("id", "div" + text);
+		
+		toolTip.style.position = "absolute";
+
+		toolTip.style.padding = "10px";
+		toolTip.style.borderRadius = "20px";
+
+		toolTip.style.left = this.offsetLeft + this.offsetWidth +  "px";
+		toolTip.style.top = this.offsetTop + "px";
+		toolTip.innerHTML = toolTipText;
+		document.body.appendChild(toolTip);	
+}
+
+function HideAnswerToolTip()
+{
+	var text = this.innerHTML;
+	let toolTip = document.getElementById("div"+text);
+	if(toolTip !=  null)
+	{
+		toolTip.remove();
+	}
+}
+
+
+function DisplayQuestion()
+{
+		if (hasTestStarted)
+		{
+		var text = this.innerHTML;
+		var num = parseInt(text, 10); // 123
+
+		let numlist = questionMap.get(num);
+		
+		if (numlist != undefined)
+		{
+			var numbers_div = document.getElementById("numbers");
+			while (numbers_div.firstChild) {
+			  numbers_div.removeChild(numbers_div.firstChild);
+			}
+			
+			for (var i = 0; i < numlist.length; i++) {
+			  var number = numlist[i];
+			  numbers.push(number);
+			  var number_div = document.createElement("div");
+			  if(number > 0)
+			  {
+			  
+			  number_div.innerText = "\xa0" +number;
+			  }
+			  else{
+			  number_div.innerText = number;
+			  }
+			  number_div.classList.add("number");
+			  numbers_div.classList.add("right-aligned");
+			  numbers_div.appendChild(number_div);
+			}
+			
+			var oldAns = answerMap.get(num);
+			document.getElementById("input").value = oldAns;
+			document.getElementById("input").disabled = true;
+		}
+		
+		if((numlist != undefined) && liveQuestion == num )
+		{
+			document.getElementById("input").disabled = false;
+			document.getElementById("input").focus();
+		}
+		}
+}
+
+      // function to generate new numbers
+      function generateNumbers(d) {
+        numbers = [];
+        sum = 0;
+
+        var numbers_div = document.getElementById("numbers");
+        while (numbers_div.firstChild) {
+          numbers_div.removeChild(numbers_div.firstChild);
+        }
+
+        var numlist = generateNumbersEx(d);
+		questionMap.set(sumCount, numlist);
+		sumCount++;
+
+        for (var i = 0; i < numberOfRows; i++) {
+          var number = numlist[i];
+          numbers.push(number);
+          sum += number;
+          var number_div = document.createElement("div");
+		  if(number > 0)
+		  {
+		  
+          number_div.innerText = "\xa0" +number;
+		  }
+		  else{
+		  number_div.innerText = number;
+		  }
+          number_div.classList.add("number");
+          numbers_div.classList.add("right-aligned");
+          numbers_div.appendChild(number_div);
+        }
+      }
+      // function to check the sum
+      function checkSum() {
+		attemptedSums++;
+        var input_value = document.getElementById("input").value;
+        document.getElementById("input").value = "";
+        var message = document.getElementById("message");
+		var next = currentButton+1;
+        var current = document.getElementById("button" + currentButton);
+		
+        var current1 = document.getElementById("button" + next);
+
+		if(next < totalSums)
+		{
+			current1.style.border = "4px solid Chartreuse";
+			current1.style.backgroundColor = "MidnightBlue";
+			liveQuestion = next;
+		}
+
+		var ans = parseInt(input_value, 10)
+        if (ans == sum) {
+          current.style.backgroundColor = "green";
+		  current.style.border = "0px";
+          counter++;
+        } else {
+          current.style.backgroundColor = "red";
+		  current.style.border = "0px";
+		  wrongSums++;
+        }
+		answerMap.set(currentButton, ans);
+		correctAnswerMap.set(currentButton, sum);
+		
+        currentButton++;
+        if (currentButton > totalSums) {
+          message.innerHTML = "Exam Complete.";
+          message.style.color = "brown";
+         document.getElementById("counter").innerHTML = "You attempted " + attemptedSums + " sums, out of which "+(attemptedSums - wrongSums)  +" were correct. Your score is " + (attemptedSums - wrongSums) +" out of " +totalSums ;
+		 document.getElementById("input").disabled = true;
+        var button = document.getElementById("next");
+        button.style.visibility = "hidden";
+         clearInterval(timerId);
+		 
+        var button = document.getElementById("screenshot");
+        button.style.visibility = "visible";		 
+        }
+		if (currentButton > singleDigitCutOff)
+		{
+		numberOfRows = numRowsAfterCutoff;
+        generateNumbers(2);
+		}
+		else
+		{
+		generateNumbers(1);
+		}
+        document.getElementById("input").focus();
+      }
+	  
+	  function handleKeyPress(event)
+	  {
+		if(event.keyCode == 13)
+		{
+			checkSum();
+		}
+	  }
+    </script>
+
+    <style>
+
+    </style>
+
+
+
+  </head>
+  <body onload="generateNumbers(1)">
+    <div>
+      <div style="text-align: center;">
+      </div>
+	  
+	  <div class="container">
+
+<div class="box2">
+</br>
+<h2 class="message">Solve the following Sums : </h2>
+<div id="numbers" style="margin:10px 1px 1px 100px;"></div>
+<h3>_______________________________</h3>
+<h2 class="message"> Ans :
+<input type="number" pattern="[0-9]*" id="input" placeholder="" style="width: 100px; height: 30px;" onkeypress="handleKeyPress(event)" disabled>
+ </h2>
+</br>
+</br>
+<button id="next" onclick="checkSum()" style="visibility: hidden;">Next</button>
+</br>
+<button id="start" onclick="startTimer()">Start</button>
+
+<h2 style="color:brown;"><div id="message"></div></h2>
+
+<h2> <div id="counter" style="width: 450px;"></div> </h2>
+<h2><div id="timer"> </div></h2>
+</div>
+
+      <div id="buttons" class="box1">
+      <!-- buttons are generated here -->
+      <script>
+         for (var i = 1; i <= totalSums; i++) {
+		
+         var button = document.createElement("button");
+         button.innerHTML = i;
+         button.classList.add("button");
+         button.setAttribute("id", "button" + i);
+		 button.addEventListener("click",DisplayQuestion);
+		 button.addEventListener("mouseover",ShowAnswerTootip);
+		 button.addEventListener("mouseout",HideAnswerToolTip);
+         buttons.appendChild(button);
+
+       }
+</script>
+</br>
+</br>
+</div>
+
+</div>
+  </body>
+</html>
